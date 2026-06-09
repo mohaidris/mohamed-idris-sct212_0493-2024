@@ -1,51 +1,38 @@
-package Lecture4_interfaces_abstract_classes;
-
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Calendar;
+import java.util.UUID;
 
-public abstract class BaseTransaction implements TransactionInterface {
-    private final int amount;
-    private final Calendar date;
-    private final String transactionID;
+public class BaseTransaction implements TransactionInterface {
+    protected double amount;
+    protected Calendar date;
+    protected String transactionID;
 
-    /**
-     * Lecture1_adt.TransactionInterface Constructor
-     * @param amount in an integer
-     * @param date: Not null, and must be a Calendar object
-     * @return void
-     * Instialises the field, attributes of a transaction
-     * Creates a object of this
-     */
-    public BaseTransaction(int amount, @NotNull Calendar date)  {
+    public BaseTransaction(double amount) {
         this.amount = amount;
-        this.date = (Calendar) date.clone();
-        int uniq = (int) Math.random()*10000;
-        transactionID = date.toString()+uniq;
+        this.date = Calendar.getInstance();
+        this.transactionID = UUID.randomUUID().toString().substring(0, 8); // Unique short ID
     }
 
-    /**
-     * getAmount()
-     * @return integer
-     */
-    public double getAmount() {
-        return amount; // Because we are dealing with Value types we need not worry about what we return
+    @Override
+    public double getAmount() { return this.amount; }
+
+    @Override
+    public Calendar getDate() { return this.date; }
+
+    @Override
+    public String getTransactionID() { return this.transactionID; }
+
+    @Override
+    public void printTransactionDetails() {
+        System.out.println("--- Transaction Details ---");
+        System.out.println("ID: " + transactionID);
+        System.out.println("Date: " + date.getTime());
+        System.out.println("Base Amount: KSh " + amount);
     }
 
-    /**
-     * getDate()
-     * @return Calendar Object
-     */
-    public Calendar getDate() {
-//        return date;    // Because we are dealing with Reference types we need to judiciously copy what our getters return
-        return (Calendar) date.clone(); // Defensive copying or Judicious Copying
+    // Question 1: Base implementation differs substantially from subclasses
+    @Override
+    public void apply(BankAccount ba) throws InsufficientFundsException {
+        System.out.println("[BaseTransaction] Checking system connectivity for account: " + ba.getAccountNumber());
+        System.out.println("[BaseTransaction] No balance modifications done by the base layer abstraction.");
     }
-
-    // Method to get a unique identifier for the transaction
-    public String getTransactionID(){
-        return  transactionID;
-    }
-    // Method to print a transaction receipt or details
-    public abstract void printTransactionDetails();
-    public abstract void apply(BankAccount ba);
 }
