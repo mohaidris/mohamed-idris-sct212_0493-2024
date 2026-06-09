@@ -4,8 +4,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         
-        // --- Simple School Registration System Segment ---
-        System.out.println("=================================================");
+        // --- Simple School Registration System Segment --
         System.out.println("      JKUAT ADVANCED PROGRAMMING ASSIGNMENT      ");
         System.out.println("=================================================");
         System.out.print("Enter Student Full Name: ");
